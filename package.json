@@ -1,0 +1,17 @@
+{
+  "name": "library-api-lab",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Isolated, dependency-free backend laboratory for a fictional library",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "check": "node --check src/app.js && node --check src/catalog.js && node --check src/server.js && node --check test/api.test.js",
+    "test": "node --test"
+  },
+  "license": "MIT"
+}
