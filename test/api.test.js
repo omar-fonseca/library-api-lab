@@ -54,6 +54,29 @@ test('búsqueda insensible a mayúsculas y filtro de género', async () => {
   assert.ok(genre.body.data.every((book) => book.genre === 'science'));
 });
 
+test('búsqueda admite Unicode y recorta espacios', async () => {
+  const unicode = await request('/api/v1/books?q=' + encodeURIComponent('CIENCIA COTIDIANA'));
+  assert.equal(unicode.status, 200);
+  assert.equal(unicode.body.meta.total, 1);
+  assert.equal(unicode.body.data[0].id, 'bk-006');
+
+  const spaces = await request('/api/v1/books?q=%20Niebla%20');
+  assert.equal(spaces.status, 200);
+  assert.equal(spaces.body.meta.total, 2);
+});
+
+test('límites de paginación aceptan máximos y rechazan el siguiente valor', async () => {
+  const accepted = await request('/api/v1/books?page=10000&limit=50');
+  assert.equal(accepted.status, 200);
+  assert.deepEqual(accepted.body.data, []);
+
+  for (const path of ['/api/v1/books?page=10001', '/api/v1/books?limit=51']) {
+    const result = await request(path);
+    assert.equal(result.status, 400, path);
+    assert.equal(result.body.error.code, 'INVALID_QUERY', path);
+  }
+});
+
 test('página fuera de rango devuelve lista vacía, no error', async () => {
   const result = await request('/api/v1/books?page=99');
   assert.equal(result.status, 200);
