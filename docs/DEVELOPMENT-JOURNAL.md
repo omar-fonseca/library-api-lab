@@ -21,3 +21,9 @@ Esta bitácora explica los cambios en lenguaje humano para facilitar el estudio 
 **Evidencia:** [GitHub Actions, ejecución #1](https://github.com/omar-fonseca/library-api-lab/actions/runs/40011488110). Job `validate`: **success**. Pasos completados correctamente: `npm ci`, `npm run check` y `npm test` en Node.js 22.
 
 **Alcance de la validación:** instalación reproducible, análisis sintáctico y pruebas HTTP automatizadas; no constituye una auditoría integral de seguridad ni una evaluación de producción.
+
+## 2026-10-24 — Cobertura de límites de consulta
+
+**Cambio:** se agregan pruebas para búsqueda con Unicode/espacios y para los límites máximos de `page` y `limit`. No cambia el contrato HTTP.
+
+**Origen:** mejora acotada implementada con asistencia automatizada de IA. La integración queda condicionada al CI del PR.
