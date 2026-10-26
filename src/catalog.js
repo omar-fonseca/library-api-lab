@@ -16,7 +16,7 @@ export function findBookById(id) {
   return books.find((book) => book.id === id) ?? null;
 }
 
-export function listBooks({ page, limit, q, genre }) {
+export function listBooks({ page, limit, q, genre, sort = 'title', order = 'asc' }) {
   const search = q?.toLocaleLowerCase('es') ?? '';
   const filtered = books.filter((book) => {
     const matchesGenre = !genre || book.genre === genre;
@@ -24,14 +24,24 @@ export function listBooks({ page, limit, q, genre }) {
     return matchesGenre && (!search || searchable.includes(search));
   });
 
-  const total = filtered.length;
+  const direction = order === 'desc' ? -1 : 1;
+  const sorted = filtered.toSorted((left, right) => {
+    const primary = sort === 'year'
+      ? left.year - right.year
+      : left.title.localeCompare(right.title, 'es');
+    return (primary || left.id.localeCompare(right.id)) * direction;
+  });
+
+  const total = sorted.length;
   return {
-    data: filtered.slice((page - 1) * limit, page * limit),
+    data: sorted.slice((page - 1) * limit, page * limit),
     meta: {
       page,
       limit,
       total,
-      totalPages: Math.ceil(total / limit)
+      totalPages: Math.ceil(total / limit),
+      sort,
+      order
     }
   };
 }

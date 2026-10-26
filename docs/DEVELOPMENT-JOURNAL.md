@@ -27,3 +27,9 @@ Esta bitácora explica los cambios en lenguaje humano para facilitar el estudio 
 **Cambio:** se agregan pruebas para búsqueda con Unicode/espacios y para los límites máximos de `page` y `limit`. No cambia el contrato HTTP.
 
 **Origen:** mejora acotada implementada con asistencia automatizada de IA. La integración queda condicionada al CI del PR.
+
+## 2026-10-26 — Ordenación configurable
+
+**Cambio:** el catálogo admite `sort=title|year` y `order=asc|desc`, aplicados antes de paginar y con desempate estable por identificador. Se agregan pruebas del contrato y de valores inválidos.
+
+**Origen:** mejora acotada implementada con asistencia automatizada de IA. La integración queda condicionada al CI del PR.

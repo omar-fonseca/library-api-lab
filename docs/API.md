@@ -18,18 +18,20 @@ Parámetros opcionales:
 | `limit` | Entero entre 1 y 50 | 10 |
 | `q` | Texto libre, máximo 80 caracteres; busca por título o autor | vacío |
 | `genre` | `engineering`, `fiction`, `history` o `science` | todos |
+| `sort` | `title` o `year` | `title` |
+| `order` | `asc` o `desc` | `asc` |
 
-Los parámetros desconocidos o duplicados devuelven `400 INVALID_QUERY`.
+Los parámetros desconocidos, duplicados o con valores no admitidos devuelven `400 INVALID_QUERY`. La ordenación se aplica antes de paginar; el identificador actúa como desempate estable.
 
-Ejemplo: `GET /api/v1/books?genre=fiction&limit=2&page=1`
+Ejemplo: `GET /api/v1/books?genre=fiction&sort=year&order=desc&limit=2&page=1`
 
 ```json
 {
   "data": [
-    {"id":"bk-001","title":"El mapa de la lluvia","author":"Clara Niebla","genre":"fiction","year":2019},
-    {"id":"bk-005","title":"Historias del faro","author":"Lina Arce","genre":"fiction","year":2015}
+    {"id":"bk-007","title":"La ciudad invisible","author":"Clara Niebla","genre":"fiction","year":2022},
+    {"id":"bk-001","title":"El mapa de la lluvia","author":"Clara Niebla","genre":"fiction","year":2019}
   ],
-  "meta":{"page":1,"limit":2,"total":3,"totalPages":2}
+  "meta":{"page":1,"limit":2,"total":3,"totalPages":2,"sort":"year","order":"desc"}
 }
 ```
 

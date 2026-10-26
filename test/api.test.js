@@ -77,6 +77,24 @@ test('límites de paginación aceptan máximos y rechazan el siguiente valor', a
   }
 });
 
+test('ordenación por año y título es configurable y estable', async () => {
+  const years = await request('/api/v1/books?sort=year&order=desc&limit=3');
+  assert.deepEqual(years.body.data.map((book) => book.year), [2024, 2023, 2022]);
+  assert.equal(years.body.meta.sort, 'year');
+  assert.equal(years.body.meta.order, 'desc');
+
+  const titles = await request('/api/v1/books?sort=title&order=asc');
+  const actual = titles.body.data.map((book) => book.title);
+  const expected = [...actual].sort((left, right) => left.localeCompare(right, 'es'));
+  assert.deepEqual(actual, expected);
+
+  for (const path of ['/api/v1/books?sort=author', '/api/v1/books?order=random']) {
+    const result = await request(path);
+    assert.equal(result.status, 400, path);
+    assert.equal(result.body.error.code, 'INVALID_QUERY', path);
+  }
+});
+
 test('página fuera de rango devuelve lista vacía, no error', async () => {
   const result = await request('/api/v1/books?page=99');
   assert.equal(result.status, 200);

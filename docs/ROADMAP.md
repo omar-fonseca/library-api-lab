@@ -5,7 +5,7 @@ No existe obligación de publicar cambios en cada ejecución: priorizar calidad 
 ## Backlog
 
 1. **Cobertura adicional de validación**: probar entradas vacías, búsquedas Unicode y límites de paginación. Criterio: pruebas reproducibles.
-2. **Ordenación configurable**: `sort=title|year`, `order=asc|desc`; documentación y pruebas de orden estable.
+2. ~~**Ordenación configurable**: `sort=title|year`, `order=asc|desc`; documentación y pruebas de orden estable.~~ Completado.
 3. **ETag o cache condicional**: investigar si aporta valor a una API de solo lectura antes de implementarlo.
 4. **Observabilidad mínima**: registrar método, ruta y duración sin información sensible; pruebas de logs.
 5. **Revisión TypeScript**: contrastar costo/beneficio de migración y asegurar tipado si se aprueba.

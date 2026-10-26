@@ -24,7 +24,7 @@ function positiveInteger(value, fallback, maximum) {
 }
 
 function parseFilters(params) {
-  const allowed = new Set(['page', 'limit', 'q', 'genre']);
+  const allowed = new Set(['page', 'limit', 'q', 'genre', 'sort', 'order']);
   for (const key of params.keys()) {
     if (!allowed.has(key)) return { error: 'Parámetro no admitido: ' + key };
     if (params.getAll(key).length !== 1) return { error: 'Parámetro repetido: ' + key };
@@ -43,7 +43,14 @@ function parseFilters(params) {
   if (genre && !genres.includes(genre)) {
     return { error: 'genre debe ser uno de: ' + genres.join(', ') };
   }
-  return { value: { page, limit, q, genre } };
+
+  const sort = (params.get('sort') ?? 'title').trim().toLowerCase();
+  if (!['title', 'year'].includes(sort)) return { error: 'sort debe ser title o year' };
+
+  const order = (params.get('order') ?? 'asc').trim().toLowerCase();
+  if (!['asc', 'desc'].includes(order)) return { error: 'order debe ser asc o desc' };
+
+  return { value: { page, limit, q, genre, sort, order } };
 }
 
 export function createApp() {
