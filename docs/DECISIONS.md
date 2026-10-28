@@ -11,3 +11,6 @@
 
 ## ADR-004 — Trabajo automatizado revisable
 **Estado:** aceptada. Toda modificación debe tener valor real, pruebas y una bitácora. Automatizaciones que no puedan comprobar seguridad o corrección deben informar la limitación y no integrar.
+
+## ADR-005 — Revalidación condicional de recursos de lectura
+**Estado:** aceptada. El catálogo ficticio es determinista, de solo lectura y pequeño: un ETag fuerte calculado a partir del JSON permite responder 304 sin transferir el cuerpo. Se usa `private, no-cache` para permitir almacenamiento privado con revalidación obligatoria; no se aplica a salud ni errores. Se evita infraestructura externa y nuevas dependencias. Revisar si se introduce autenticación o información sensible.
