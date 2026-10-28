@@ -33,3 +33,11 @@ Esta bitácora explica los cambios en lenguaje humano para facilitar el estudio 
 **Cambio:** el catálogo admite `sort=title|year` y `order=asc|desc`, aplicados antes de paginar y con desempate estable por identificador. Se agregan pruebas del contrato y de valores inválidos.
 
 **Origen:** mejora acotada implementada con asistencia automatizada de IA. La integración queda condicionada al CI del PR.
+
+## 2026-10-28 — Revalidación condicional con ETag
+
+**Necesidad:** reducir transferencia repetida de respuestas idénticas en los endpoints de consulta, manteniendo el contrato de solo lectura.
+
+**Cambio:** `ETag` fuerte (SHA-256 del JSON) y soporte de `If-None-Match` para listado y detalle. Las coincidencias devuelven `304` sin cuerpo; los errores y `/health` conservan `no-store`. Se añadió una prueba HTTP de regresión.
+
+**Origen:** implementación asistida por IA. **Validación:** GitHub Actions del PR correspondiente; no se atribuyen resultados antes de su ejecución.

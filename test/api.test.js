@@ -19,7 +19,8 @@ after(async () => {
 
 async function request(path, options) {
   const response = await fetch(base + path, options);
-  return { status: response.status, headers: response.headers, body: await response.json() };
+  const raw = await response.text();
+  return { status: response.status, headers: response.headers, body: raw ? JSON.parse(raw) : null };
 }
 
 test('health devuelve un estado explícito', async () => {
@@ -137,4 +138,46 @@ test('métodos no permitidos responden 405 con Allow', async () => {
   assert.equal(result.status, 405);
   assert.equal(result.headers.get('allow'), 'GET');
   assert.equal(result.body.error.code, 'METHOD_NOT_ALLOWED');
+});
+
+test('ETag permite revalidar listado y detalle sin transferir cuerpo', async () => {
+  const list = await request('/api/v1/books?sort=year');
+  const etag = list.headers.get('etag');
+  assert.match(etag, /^"[a-f0-9]{64}"$/);
+  assert.equal(list.headers.get('cache-control'), 'private, no-cache');
+
+  const cached = await request('/api/v1/books?sort=year', {
+    headers: { 'if-none-match': etag }
+  });
+  assert.equal(cached.status, 304);
+  assert.equal(cached.body, null);
+  assert.equal(cached.headers.get('etag'), etag);
+
+  const weak = await request('/api/v1/books?sort=year', {
+    headers: { 'if-none-match': '"other", W/' + etag }
+  });
+  assert.equal(weak.status, 304);
+
+  const different = await request('/api/v1/books?sort=title', {
+    headers: { 'if-none-match': etag }
+  });
+  assert.equal(different.status, 200);
+  assert.notEqual(different.headers.get('etag'), etag);
+
+  const detail = await request('/api/v1/books/bk-001');
+  const detailEtag = detail.headers.get('etag');
+  assert.ok(detailEtag);
+  const detailCached = await request('/api/v1/books/bk-001', {
+    headers: { 'if-none-match': detailEtag }
+  });
+  assert.equal(detailCached.status, 304);
+  assert.equal(detailCached.body, null);
+
+  const missing = await request('/api/v1/books/bk-999', {
+    headers: { 'if-none-match': '*' }
+  });
+  assert.equal(missing.status, 404);
+
+  const health = await request('/health');
+  assert.equal(health.headers.get('etag'), null);
 });

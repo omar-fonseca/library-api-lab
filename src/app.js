@@ -1,14 +1,36 @@
 import { createServer } from 'node:http';
+import { createHash } from 'node:crypto';
 import { findBookById, genres, listBooks } from './catalog.js';
 
-function respond(res, status, body, extraHeaders = {}) {
+function respond(res, status, body, extraHeaders = {}, request = null) {
   const payload = JSON.stringify(body);
-  res.writeHead(status, {
+  const headers = {
     'content-type': 'application/json; charset=utf-8',
     'cache-control': 'no-store',
     'x-content-type-options': 'nosniff',
     ...extraHeaders
-  });
+  };
+
+  // Solo los recursos del catálogo usan validadores HTTP.
+  if (request && status === 200) {
+    const etag = '"' + createHash('sha256').update(payload).digest('hex') + '"';
+    headers.etag = etag;
+    headers['cache-control'] = 'private, no-cache';
+
+    // If-None-Match usa comparación débil para GET, incluso con ETag fuerte.
+    const conditional = request.headers['if-none-match'];
+    if (typeof conditional === 'string' && conditional.split(',').some((tag) => {
+      const candidate = tag.trim();
+      return candidate === '*' || candidate === etag || candidate === 'W/' + etag;
+    })) {
+      delete headers['content-type'];
+      res.writeHead(304, headers);
+      res.end();
+      return;
+    }
+  }
+
+  res.writeHead(status, headers);
   res.end(payload);
 }
 
@@ -90,7 +112,7 @@ export function createApp() {
         fail(res, 400, 'INVALID_QUERY', parsed.error);
         return;
       }
-      respond(res, 200, listBooks(parsed.value));
+      respond(res, 200, listBooks(parsed.value), {}, req);
       return;
     }
 
@@ -104,6 +126,6 @@ export function createApp() {
       fail(res, 404, 'BOOK_NOT_FOUND', 'Libro no encontrado');
       return;
     }
-    respond(res, 200, { data: book });
+    respond(res, 200, { data: book }, {}, req);
   });
 }

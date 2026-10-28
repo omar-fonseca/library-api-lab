@@ -8,6 +8,7 @@ Laboratorio autónomo de ingeniería backend: una pequeña API REST de bibliotec
 - `GET /api/v1/books`: catálogo con filtros `q`, `genre` y paginación.
 - `GET /api/v1/books/:id`: detalle de un libro.
 - Errores HTTP JSON consistentes, pruebas de integración y GitHub Actions.
+- Revalidación condicional con ETag en las consultas de libros (304 sin cuerpo).
 
 ## Requisitos y ejecución
 
