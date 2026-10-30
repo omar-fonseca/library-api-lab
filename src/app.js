@@ -75,8 +75,27 @@ function parseFilters(params) {
   return { value: { page, limit, q, genre, sort, order } };
 }
 
-export function createApp() {
+export function createApp({ logRequest = (entry) => console.info(JSON.stringify(entry)) } = {}) {
   return createServer((req, res) => {
+    const startedAt = process.hrtime.bigint();
+    let route = 'unmatched';
+
+    // Un registro por respuesta finalizada; nunca incluir URL, query, ID ni cabeceras.
+    res.once('finish', () => {
+      const elapsedMs = Number(process.hrtime.bigint() - startedAt) / 1e6;
+      const entry = {
+        method: req.method ?? 'UNKNOWN',
+        route,
+        status: res.statusCode,
+        durationMs: Number(elapsedMs.toFixed(2))
+      };
+      try {
+        logRequest(entry);
+      } catch {
+        // Un fallo de observabilidad no debe derribar el proceso HTTP.
+      }
+    });
+
     let url;
     try {
       url = new URL(req.url ?? '/', 'http://localhost');
@@ -86,6 +105,13 @@ export function createApp() {
     }
 
     const path = url.pathname;
+    route = path === '/health'
+      ? '/health'
+      : path === '/api/v1/books'
+        ? '/api/v1/books'
+        : path.startsWith('/api/v1/books/')
+          ? '/api/v1/books/:id'
+          : 'unmatched';
     const isHealth = path === '/health';
     const isCollection = path === '/api/v1/books';
     const isDetail = /^\/api\/v1\/books\/bk-[0-9]{3}$/.test(path);

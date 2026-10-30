@@ -6,6 +6,7 @@ Formato simplificado, cambios reales y verificables.
 
 ### Agregado
 
+- Registro HTTP estructurado de respuestas finalizadas, con rutas normalizadas y sin parámetros ni identificadores concretos; prueba de privacidad (implementación asistida por IA).
 - Revalidación condicional con ETag en listado y detalle de libros; respuesta 304 sin cuerpo cuando no cambia la representación (implementación asistida por IA).
 
 ## [0.1.0] — 2026-10-23

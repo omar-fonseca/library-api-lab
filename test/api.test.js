@@ -181,3 +181,47 @@ test('ETag permite revalidar listado y detalle sin transferir cuerpo', async () 
   const health = await request('/health');
   assert.equal(health.headers.get('etag'), null);
 });
+
+test('observabilidad registra método, plantilla de ruta, estado y duración sin datos de consulta', async () => {
+  const entries = [];
+  const isolated = createApp({ logRequest: (entry) => entries.push(entry) });
+  isolated.listen(0, '127.0.0.1');
+  await once(isolated, 'listening');
+  const origin = 'http://127.0.0.1:' + isolated.address().port;
+
+  async function hit(path, options) {
+    const response = await fetch(origin + path, options);
+    await response.text();
+    return response;
+  }
+
+  try {
+    const first = await hit('/api/v1/books?q=secret-query-value');
+    const etag = first.headers.get('etag');
+    await hit('/api/v1/books?q=secret-query-value', {
+      headers: { 'if-none-match': etag }
+    });
+    await hit('/api/v1/books?limit=0');
+    await hit('/api/v1/books/bk-999');
+    await hit('/api/v1/books', { method: 'POST' });
+    await hit('/unknown?token=secret-token-value');
+
+    await new Promise((resolve) => setImmediate(resolve));
+
+    assert.deepEqual(entries.map(({ method, route, status }) => [method, route, status]), [
+      ['GET', '/api/v1/books', 200],
+      ['GET', '/api/v1/books', 304],
+      ['GET', '/api/v1/books', 400],
+      ['GET', '/api/v1/books/:id', 404],
+      ['POST', '/api/v1/books', 405],
+      ['GET', 'unmatched', 404]
+    ]);
+    assert.ok(entries.every(({ durationMs }) => Number.isFinite(durationMs) && durationMs >= 0));
+    const serialized = JSON.stringify(entries);
+    assert.ok(!serialized.includes('secret-query-value'));
+    assert.ok(!serialized.includes('secret-token-value'));
+    assert.ok(!serialized.includes('bk-999'));
+  } finally {
+    await new Promise((resolve, reject) => isolated.close((error) => error ? reject(error) : resolve()));
+  }
+});
