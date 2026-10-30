@@ -41,3 +41,11 @@ Esta bitácora explica los cambios en lenguaje humano para facilitar el estudio 
 **Cambio:** `ETag` fuerte (SHA-256 del JSON) y soporte de `If-None-Match` para listado y detalle. Las coincidencias devuelven `304` sin cuerpo; los errores y `/health` conservan `no-store`. Se añadió una prueba HTTP de regresión.
 
 **Origen:** implementación asistida por IA. **Validación:** GitHub Actions del PR correspondiente; no se atribuyen resultados antes de su ejecución.
+
+## 2026-10-30 — Observabilidad HTTP mínima
+
+**Necesidad:** disponer de trazas de funcionamiento sin exponer búsquedas, identificadores ni cabeceras en los registros.
+
+**Cambio:** `createApp` registra al finalizar la respuesta un evento estructurado con método, plantilla de ruta, código HTTP y duración en milisegundos. El colector es inyectable para pruebas; se cubren respuestas 200, 304, 400, 404 y 405 y la ausencia de valores sensibles.
+
+**Origen:** cambio implementado con asistencia automatizada de IA. **Validación:** GitHub Actions del PR; no se afirma éxito antes de la ejecución.
