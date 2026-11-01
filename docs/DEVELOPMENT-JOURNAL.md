@@ -49,3 +49,11 @@ Esta bitácora explica los cambios en lenguaje humano para facilitar el estudio 
 **Cambio:** `createApp` registra al finalizar la respuesta un evento estructurado con método, plantilla de ruta, código HTTP y duración en milisegundos. El colector es inyectable para pruebas; se cubren respuestas 200, 304, 400, 404 y 405 y la ausencia de valores sensibles.
 
 **Origen:** cambio implementado con asistencia automatizada de IA. **Validación:** GitHub Actions del PR; no se afirma éxito antes de la ejecución.
+
+## 2026-11-01 — Búsqueda tolerante a tildes
+
+**Necesidad:** permitir que una consulta sin teclado de acentos encuentre títulos como «Diseño de servicios».
+
+**Cambio:** se normalizan únicamente las cadenas de búsqueda (Unicode NFD y eliminación de marcas diacríticas), conservando intactos los datos del catálogo. Prueba HTTP con `diseno`, `DISEÑO` y la variante Unicode descompuesta.
+
+**Origen:** implementación automatizada asistida por IA. **Validación:** GitHub Actions del PR; integración condicionada al CI verde.
