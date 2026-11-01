@@ -16,11 +16,16 @@ export function findBookById(id) {
   return books.find((book) => book.id === id) ?? null;
 }
 
+// Búsqueda tolerante a tildes y variantes Unicode; el catálogo original no se modifica.
+function normalizeSearch(text) {
+  return text.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase('es');
+}
+
 export function listBooks({ page, limit, q, genre, sort = 'title', order = 'asc' }) {
-  const search = q?.toLocaleLowerCase('es') ?? '';
+  const search = normalizeSearch(q ?? '');
   const filtered = books.filter((book) => {
     const matchesGenre = !genre || book.genre === genre;
-    const searchable = (book.title + ' ' + book.author).toLocaleLowerCase('es');
+    const searchable = normalizeSearch(book.title + ' ' + book.author);
     return matchesGenre && (!search || searchable.includes(search));
   });
 

@@ -66,6 +66,15 @@ test('búsqueda admite Unicode y recorta espacios', async () => {
   assert.equal(spaces.body.meta.total, 2);
 });
 
+test('búsqueda ignora tildes y admite caracteres Unicode descompuestos', async () => {
+  for (const query of ['diseno', 'DISEÑO', 'disen\u0303o']) {
+    const result = await request('/api/v1/books?q=' + encodeURIComponent(query));
+    assert.equal(result.status, 200, query);
+    assert.equal(result.body.meta.total, 1, query);
+    assert.equal(result.body.data[0].id, 'bk-008', query);
+  }
+});
+
 test('límites de paginación aceptan máximos y rechazan el siguiente valor', async () => {
   const accepted = await request('/api/v1/books?page=10000&limit=50');
   assert.equal(accepted.status, 200);
