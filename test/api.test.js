@@ -234,3 +234,15 @@ test('observabilidad registra método, plantilla de ruta, estado y duración sin
     await new Promise((resolve, reject) => isolated.close((error) => error ? reject(error) : resolve()));
   }
 });
+
+
+test('búsqueda rechaza controles codificados sin bloquear Unicode válido', async () => {
+  for (const q of ['%00', 'Niebla%0Aotro', 'Niebla%0D', '%7F']) {
+    const result = await request('/api/v1/books?q=' + q);
+    assert.equal(result.status, 400, q);
+    assert.equal(result.body.error.code, 'INVALID_QUERY', q);
+  }
+  const valid = await request('/api/v1/books?q=' + encodeURIComponent('Diseño de servicios'));
+  assert.equal(valid.status, 200);
+  assert.equal(valid.body.meta.total, 1);
+});
