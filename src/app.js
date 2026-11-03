@@ -60,6 +60,9 @@ function parseFilters(params) {
 
   const q = (params.get('q') ?? '').trim();
   if (q.length > 80) return { error: 'q no puede superar 80 caracteres' };
+  if (/[\u0000-\u001F\u007F]/u.test(q)) {
+    return { error: 'q no puede contener caracteres de control' };
+  }
 
   const genre = (params.get('genre') ?? '').trim().toLowerCase();
   if (genre && !genres.includes(genre)) {
