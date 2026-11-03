@@ -4,6 +4,10 @@ Formato simplificado, cambios reales y verificables.
 
 ## [Unreleased]
 
+### Corregido
+
+- Rechazo explícito de caracteres de control en búsquedas `q`, con prueba de regresión (implementación asistida por IA).
+
 ### Agregado
 
 - Búsqueda por título y autor tolerante a tildes y variantes Unicode, con prueba de regresión (implementación asistida por IA).
