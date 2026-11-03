@@ -57,3 +57,11 @@ Esta bitácora explica los cambios en lenguaje humano para facilitar el estudio 
 **Cambio:** se normalizan únicamente las cadenas de búsqueda (Unicode NFD y eliminación de marcas diacríticas), conservando intactos los datos del catálogo. Prueba HTTP con `diseno`, `DISEÑO` y la variante Unicode descompuesta.
 
 **Origen:** implementación automatizada asistida por IA. **Validación:** GitHub Actions del PR; integración condicionada al CI verde.
+
+## 2026-11-03 — Validación de controles en búsqueda
+
+**Necesidad:** evitar aceptar secuencias de control codificadas (NUL, saltos de línea y DEL) en el parámetro de búsqueda sin restringir Unicode legítimo.
+
+**Cambio:** `q` devuelve `400 INVALID_QUERY` ante U+0000–U+001F o U+007F; prueba HTTP de regresión y contrato actualizado.
+
+**Origen:** implementación automatizada asistida por IA. **Validación:** condicionada al CI del PR.

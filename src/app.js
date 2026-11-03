@@ -58,7 +58,11 @@ function parseFilters(params) {
     return { error: 'page debe estar entre 1 y 10000; limit entre 1 y 50' };
   }
 
-  const q = (params.get('q') ?? '').trim();
+  const rawQuery = params.get('q') ?? '';
+  if (/[\u0000-\u001F\u007F]/u.test(rawQuery)) {
+    return { error: 'q no puede contener caracteres de control' };
+  }
+  const q = rawQuery.trim();
   if (q.length > 80) return { error: 'q no puede superar 80 caracteres' };
 
   const genre = (params.get('genre') ?? '').trim().toLowerCase();
