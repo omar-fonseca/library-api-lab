@@ -16,7 +16,7 @@ Parámetros opcionales:
 | --- | --- | --- |
 | `page` | Entero entre 1 y 10000 | 1 |
 | `limit` | Entero entre 1 y 50 | 10 |
-| `q` | Texto libre, máximo 80 caracteres; busca por título o autor sin distinguir mayúsculas, tildes o variantes Unicode (p. ej. `diseno` encuentra `Diseño`) | vacío |
+| `q` | Texto libre, máximo 80 caracteres, sin caracteres de control (U+0000–U+001F, U+007F); busca por título o autor sin distinguir mayúsculas, tildes o variantes Unicode (p. ej. `diseno` encuentra `Diseño`) | vacío |
 | `genre` | `engineering`, `fiction`, `history` o `science` | todos |
 | `sort` | `title` o `year` | `title` |
 | `order` | `asc` o `desc` | `asc` |
