@@ -65,3 +65,11 @@ Esta bitácora explica los cambios en lenguaje humano para facilitar el estudio 
 **Cambio:** `q` devuelve `400 INVALID_QUERY` ante U+0000–U+001F o U+007F; prueba HTTP de regresión y contrato actualizado.
 
 **Origen:** implementación automatizada asistida por IA. **Validación:** condicionada al CI del PR.
+
+## 2026-11-05 — Regresión de caché entre páginas
+
+**Necesidad:** impedir que un cliente reciba 304 con un validador correspondiente a otra página del catálogo.
+
+**Cambio:** prueba HTTP de ETag entre páginas diferentes, revalidación correcta, validador obsoleto y comodín `*`. Sin cambios de contrato ni dependencias.
+
+**Origen:** prueba añadida mediante automatización asistida por IA. **Validación:** CI del PR antes de integrar.
