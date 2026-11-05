@@ -246,3 +246,29 @@ test('búsqueda rechaza controles codificados sin bloquear Unicode válido', asy
   assert.equal(valid.status, 200);
   assert.equal(valid.body.meta.total, 1);
 });
+
+test('ETag distingue páginas y respeta validadores de representación', async () => {
+  const first = await request('/api/v1/books?page=1&limit=2');
+  const second = await request('/api/v1/books?page=2&limit=2');
+  assert.equal(first.status, 200);
+  assert.equal(second.status, 200);
+  assert.notEqual(first.headers.get('etag'), second.headers.get('etag'));
+
+  const stale = await request('/api/v1/books?page=2&limit=2', {
+    headers: { 'if-none-match': first.headers.get('etag') }
+  });
+  assert.equal(stale.status, 200);
+  assert.deepEqual(stale.body, second.body);
+
+  const matching = await request('/api/v1/books?page=2&limit=2', {
+    headers: { 'if-none-match': second.headers.get('etag') }
+  });
+  assert.equal(matching.status, 304);
+  assert.equal(matching.body, null);
+
+  const wildcard = await request('/api/v1/books?page=2&limit=2', {
+    headers: { 'if-none-match': '*' }
+  });
+  assert.equal(wildcard.status, 304);
+  assert.equal(wildcard.body, null);
+});
