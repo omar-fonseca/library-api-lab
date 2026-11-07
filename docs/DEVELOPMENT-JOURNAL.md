@@ -73,3 +73,11 @@ Esta bitácora explica los cambios en lenguaje humano para facilitar el estudio 
 **Cambio:** prueba HTTP de ETag entre páginas diferentes, revalidación correcta, validador obsoleto y comodín `*`. Sin cambios de contrato ni dependencias.
 
 **Origen:** prueba añadida mediante automatización asistida por IA. **Validación:** CI del PR antes de integrar.
+
+## 2026-11-07 — Aislamiento de fallos de observabilidad
+
+**Necesidad:** asegurar que una excepción del colector de logs no interrumpa respuestas ni solicitudes posteriores.
+
+**Cambio:** prueba de integración con colector inyectado que lanza excepciones; verifica respuestas HTTP 200, 304 y nueva solicitud saludable, sin modificar la implementación ni añadir dependencias.
+
+**Origen:** prueba desarrollada con asistencia automatizada de IA. **Validación:** condicionada al CI del PR.
