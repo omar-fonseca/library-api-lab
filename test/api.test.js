@@ -272,3 +272,39 @@ test('ETag distingue páginas y respeta validadores de representación', async (
   assert.equal(wildcard.status, 304);
   assert.equal(wildcard.body, null);
 });
+
+test('fallo del colector de logs no interrumpe respuestas ni peticiones posteriores', async () => {
+  let calls = 0;
+  const isolated = createApp({
+    logRequest: () => {
+      calls += 1;
+      throw new Error('colector no disponible');
+    }
+  });
+  isolated.listen(0, '127.0.0.1');
+  await once(isolated, 'listening');
+  const origin = 'http://127.0.0.1:' + isolated.address().port;
+
+  try {
+    const first = await fetch(origin + '/api/v1/books');
+    assert.equal(first.status, 200);
+    const etag = first.headers.get('etag');
+    assert.ok(etag);
+    await first.text();
+
+    const second = await fetch(origin + '/api/v1/books', {
+      headers: { 'if-none-match': etag }
+    });
+    assert.equal(second.status, 304);
+    assert.equal(await second.text(), '');
+
+    const third = await fetch(origin + '/health');
+    assert.equal(third.status, 200);
+    assert.equal((await third.json()).status, 'ok');
+
+    await new Promise((resolve) => setImmediate(resolve));
+    assert.equal(calls, 3);
+  } finally {
+    await new Promise((resolve, reject) => isolated.close((error) => error ? reject(error) : resolve()));
+  }
+});
