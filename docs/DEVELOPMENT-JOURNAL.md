@@ -81,3 +81,11 @@ Esta bitácora explica los cambios en lenguaje humano para facilitar el estudio 
 **Cambio:** prueba de integración con colector inyectado que lanza excepciones; verifica respuestas HTTP 200, 304 y nueva solicitud saludable, sin modificar la implementación ni añadir dependencias.
 
 **Origen:** prueba desarrollada con asistencia automatizada de IA. **Validación:** condicionada al CI del PR.
+
+## 2026-11-09 — Validación uniforme de parámetros
+
+**Necesidad:** impedir que `genre`, `sort` u `order` acepten saltos de línea/tabulaciones codificados por efecto de `trim()`, mientras `q` ya los rechazaba.
+
+**Cambio:** validación temprana de controles para todos los parámetros admitidos; prueba HTTP de cinco entradas malformadas y un caso válido con espacios. No se añaden dependencias.
+
+**Origen:** implementación asistida por IA. **Validación:** integración condicionada al CI del PR.

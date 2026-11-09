@@ -126,6 +126,24 @@ test('consulta inválida tiene contrato de error predecible', async () => {
   }
 });
 
+test('rechaza controles codificados en todos los parámetros de consulta', async () => {
+  for (const path of [
+    '/api/v1/books?genre=fiction%0A',
+    '/api/v1/books?sort=title%09',
+    '/api/v1/books?order=asc%0D',
+    '/api/v1/books?limit=10%7F',
+    '/api/v1/books?page=1%00'
+  ]) {
+    const result = await request(path);
+    assert.equal(result.status, 400, path);
+    assert.equal(result.body.error.code, 'INVALID_QUERY', path);
+  }
+
+  const valid = await request('/api/v1/books?genre=%20fiction%20&sort=year&order=desc');
+  assert.equal(valid.status, 200);
+  assert.equal(valid.body.meta.total, 3);
+});
+
 test('detalle encuentra un libro y maneja identificadores inexistentes', async () => {
   const found = await request('/api/v1/books/bk-001');
   assert.equal(found.status, 200);

@@ -21,7 +21,7 @@ Parámetros opcionales:
 | `sort` | `title` o `year` | `title` |
 | `order` | `asc` o `desc` | `asc` |
 
-Los parámetros desconocidos, duplicados o con valores no admitidos devuelven `400 INVALID_QUERY`. La ordenación se aplica antes de paginar; el identificador actúa como desempate estable.
+Los parámetros desconocidos, duplicados, con caracteres de control (U+0000–U+001F, U+007F) o con valores no admitidos devuelven `400 INVALID_QUERY`. La ordenación se aplica antes de paginar; el identificador actúa como desempate estable.
 
 Ejemplo: `GET /api/v1/books?genre=fiction&sort=year&order=desc&limit=2&page=1`
 
