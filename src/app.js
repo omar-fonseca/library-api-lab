@@ -50,6 +50,9 @@ function parseFilters(params) {
   for (const key of params.keys()) {
     if (!allowed.has(key)) return { error: 'Parámetro no admitido: ' + key };
     if (params.getAll(key).length !== 1) return { error: 'Parámetro repetido: ' + key };
+    if (/[\u0000-\u001F\u007F]/u.test(params.get(key))) {
+      return { error: 'Parámetro con caracteres de control: ' + key };
+    }
   }
 
   const page = positiveInteger(params.get('page'), 1, 10000);

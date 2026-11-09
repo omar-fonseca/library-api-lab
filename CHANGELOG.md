@@ -6,6 +6,8 @@ Formato simplificado, cambios reales y verificables.
 
 ### Corregido
 
+- Validación uniforme: los parámetros de consulta rechazan caracteres de control codificados; prueba HTTP (asistencia automatizada de IA).
+
 - Rechazo explícito de caracteres de control en búsquedas `q`, con prueba de regresión (implementación asistida por IA).
 
 ### Agregado
