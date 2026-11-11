@@ -89,3 +89,11 @@ Esta bitácora explica los cambios en lenguaje humano para facilitar el estudio 
 **Cambio:** validación temprana de controles para todos los parámetros admitidos; prueba HTTP de cinco entradas malformadas y un caso válido con espacios. No se añaden dependencias.
 
 **Origen:** implementación asistida por IA. **Validación:** integración condicionada al CI del PR.
+
+## 2026-11-11 — Regresión de política de caché en errores
+
+**Necesidad:** asegurar que `If-None-Match: *` no convierta respuestas de error ni el endpoint de salud en `304` cacheables.
+
+**Cambio:** prueba HTTP para `/health`, consultas inválidas, libro inexistente y ruta desconocida; exige estado original, `Cache-Control: no-store`, ausencia de ETag y cuerpo JSON. Sin dependencias nuevas.
+
+**Origen:** prueba implementada mediante automatización asistida por IA. **Validación:** condicionada al CI del PR.
