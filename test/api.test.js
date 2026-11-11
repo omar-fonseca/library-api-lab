@@ -326,3 +326,19 @@ test('fallo del colector de logs no interrumpe respuestas ni peticiones posterio
     await new Promise((resolve, reject) => isolated.close((error) => error ? reject(error) : resolve()));
   }
 });
+
+
+test('errores y health nunca son cacheables aunque exista If-None-Match', async () => {
+  for (const [path, status] of [
+    ['/health', 200],
+    ['/api/v1/books?limit=0', 400],
+    ['/api/v1/books/bk-999', 404],
+    ['/missing', 404]
+  ]) {
+    const result = await request(path, { headers: { 'if-none-match': '*' } });
+    assert.equal(result.status, status, path);
+    assert.equal(result.headers.get('cache-control'), 'no-store', path);
+    assert.equal(result.headers.get('etag'), null, path);
+    assert.ok(result.body, path);
+  }
+});
