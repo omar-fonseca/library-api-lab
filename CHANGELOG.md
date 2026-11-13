@@ -12,6 +12,8 @@ Formato simplificado, cambios reales y verificables.
 
 ### Agregado
 
+- Prueba HTTP de regresión para evitar caché condicional en errores y `/health` (asistencia automatizada de IA).
+
 - Prueba de resiliencia ante excepciones del colector de logs en respuestas 200/304 y solicitudes sucesivas (asistencia automatizada de IA).
 
 - Prueba de regresión de ETag entre páginas y validadores condicionales, con asistencia automatizada de IA.
