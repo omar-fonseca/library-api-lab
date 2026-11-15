@@ -342,3 +342,17 @@ test('errores y health nunca son cacheables aunque exista If-None-Match', async 
     assert.ok(result.body, path);
   }
 });
+
+test('búsqueda vacía y límites de longitud mantienen el contrato', async () => {
+  const empty = await request('/api/v1/books?q=%20%20');
+  assert.equal(empty.status, 200);
+  assert.equal(empty.body.meta.total, 8);
+
+  const maximum = await request('/api/v1/books?q=' + 'x'.repeat(80));
+  assert.equal(maximum.status, 200);
+  assert.equal(maximum.body.meta.total, 0);
+
+  const overflow = await request('/api/v1/books?q=' + 'x'.repeat(81));
+  assert.equal(overflow.status, 400);
+  assert.equal(overflow.body.error.code, 'INVALID_QUERY');
+});
