@@ -97,3 +97,11 @@ Esta bitácora explica los cambios en lenguaje humano para facilitar el estudio 
 **Cambio:** prueba HTTP para `/health`, consultas inválidas, libro inexistente y ruta desconocida; exige estado original, `Cache-Control: no-store`, ausencia de ETag y cuerpo JSON. Sin dependencias nuevas.
 
 **Origen:** prueba implementada mediante automatización asistida por IA. **Validación:** condicionada al CI del PR.
+
+## 2026-11-15 — Límites de longitud de búsqueda
+
+**Necesidad:** cubrir el comportamiento de consultas vacías y el límite de 80 caracteres para prevenir regresiones.
+
+**Cambio:** prueba HTTP para espacios en blanco, longitud 80 aceptada y longitud 81 rechazada con `INVALID_QUERY`. No cambia la API ni se agregan dependencias.
+
+**Origen:** prueba añadida mediante automatización asistida por IA. **Validación:** integración condicionada al CI del PR.
