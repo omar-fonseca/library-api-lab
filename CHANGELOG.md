@@ -12,6 +12,8 @@ Formato simplificado, cambios reales y verificables.
 
 ### Agregado
 
+- Prueba de regresión de última página parcial y coherencia de metadatos de paginación (asistencia automatizada de IA).
+
 - Prueba de límites de longitud de búsqueda (vacío, 80 y 81 caracteres), con asistencia automatizada de IA.
 
 - Prueba HTTP de regresión para evitar caché condicional en errores y `/health` (asistencia automatizada de IA).

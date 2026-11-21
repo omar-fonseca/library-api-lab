@@ -47,6 +47,27 @@ test('paginación es determinista y no repite elementos', async () => {
   assert.ok(second.body.data.every((book) => !firstIds.has(book.id)));
 });
 
+test('última página parcial conserva metadatos y no duplica libros', async () => {
+  const pages = await Promise.all([1, 2, 3].map((page) =>
+    request('/api/v1/books?page=' + page + '&limit=3')
+  ));
+  for (const [index, result] of pages.entries()) {
+    assert.equal(result.status, 200);
+    assert.equal(result.body.meta.page, index + 1);
+    assert.equal(result.body.meta.limit, 3);
+    assert.equal(result.body.meta.total, 8);
+    assert.equal(result.body.meta.totalPages, 3);
+  }
+  assert.deepEqual(pages.map((result) => result.body.data.length), [3, 3, 2]);
+  const ids = pages.flatMap((result) => result.body.data.map((book) => book.id));
+  assert.equal(new Set(ids).size, 8);
+
+  const beyond = await request('/api/v1/books?page=4&limit=3');
+  assert.equal(beyond.status, 200);
+  assert.deepEqual(beyond.body.data, []);
+  assert.equal(beyond.body.meta.totalPages, 3);
+});
+
 test('búsqueda insensible a mayúsculas y filtro de género', async () => {
   const search = await request('/api/v1/books?q=NIEBLA');
   assert.equal(search.body.meta.total, 2);

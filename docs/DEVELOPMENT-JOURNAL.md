@@ -105,3 +105,11 @@ Esta bitácora explica los cambios en lenguaje humano para facilitar el estudio 
 **Cambio:** prueba HTTP para espacios en blanco, longitud 80 aceptada y longitud 81 rechazada con `INVALID_QUERY`. No cambia la API ni se agregan dependencias.
 
 **Origen:** prueba añadida mediante automatización asistida por IA. **Validación:** integración condicionada al CI del PR.
+
+## 2026-11-19 — Página final parcial
+
+**Necesidad:** detectar pérdidas, duplicados o metadatos inconsistentes cuando el último bloque paginado contiene menos registros que el límite.
+
+**Cambio:** prueba HTTP de tres páginas (3, 3 y 2 libros), unicidad de los ocho identificadores, metadatos y página posterior vacía. Sin cambio de contrato ni dependencias.
+
+**Origen:** prueba implementada con asistencia automatizada de IA. **Validación:** condicionada al CI del PR.
