@@ -377,3 +377,23 @@ test('búsqueda vacía y límites de longitud mantienen el contrato', async () =
   assert.equal(overflow.status, 400);
   assert.equal(overflow.body.error.code, 'INVALID_QUERY');
 });
+
+
+test('filtros combinados ordenan antes de paginar y conservan el total filtrado', async () => {
+  const query = '/api/v1/books?q=Elena&genre=engineering&sort=year&order=desc&limit=1';
+  const first = await request(query + '&page=1');
+  const second = await request(query + '&page=2');
+  const beyond = await request(query + '&page=3');
+
+  for (const result of [first, second, beyond]) {
+    assert.equal(result.status, 200);
+    assert.equal(result.body.meta.total, 2);
+    assert.equal(result.body.meta.totalPages, 2);
+    assert.equal(result.body.meta.limit, 1);
+    assert.equal(result.body.meta.sort, 'year');
+    assert.equal(result.body.meta.order, 'desc');
+  }
+  assert.deepEqual(first.body.data.map((book) => book.id), ['bk-004']);
+  assert.deepEqual(second.body.data.map((book) => book.id), ['bk-008']);
+  assert.deepEqual(beyond.body.data, []);
+});
