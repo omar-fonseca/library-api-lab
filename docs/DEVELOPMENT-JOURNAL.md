@@ -113,3 +113,11 @@ Esta bitácora explica los cambios en lenguaje humano para facilitar el estudio 
 **Cambio:** prueba HTTP de tres páginas (3, 3 y 2 libros), unicidad de los ocho identificadores, metadatos y página posterior vacía. Sin cambio de contrato ni dependencias.
 
 **Origen:** prueba implementada con asistencia automatizada de IA. **Validación:** condicionada al CI del PR.
+
+## 2026-11-23 — Composición de filtros y paginación
+
+**Necesidad:** prevenir regresiones al combinar búsqueda por autor, género, orden descendente y paginación.
+
+**Cambio:** prueba HTTP que exige orden previo al corte, total filtrado consistente y página posterior vacía. Sin cambios de API ni dependencias.
+
+**Origen:** prueba preparada por automatización asistida por IA; integración condicionada al CI del commit.
