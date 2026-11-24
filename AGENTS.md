@@ -1,27 +1,36 @@
-# Reglas para asistentes y automatizaciones
+# AGENTS.md — Gobierno de ingeniería automatizada
 
-Este laboratorio funciona de manera completamente independiente. El ÚNICO repositorio autorizado es `omar-fonseca/library-api-lab`.
+**ÚNICO repositorio autorizado:** `omar-fonseca/library-api-lab`. No consultar, leer, importar ni modificar otros proyectos. No ejecutar servicios externos pagos ni usar datos/credenciales reales.
 
-## Límites obligatorios
+## Propósito
+Evolucionar la API ficticia existente hacia un software bibliotecario escolar pequeño, funcional y eventualmente SaaS. El README y `docs/product/PRODUCT-VISION.md` distinguen estado implementado de visión futura.
 
-- No leer, consultar, importar ni modificar otros proyectos o repositorios.
-- No usar secretos, cuentas externas, datos de clientes, despliegues pagos ni credenciales.
-- Nunca inventar resultados de ejecución de pruebas.
-- No generar commits vacíos o cosméticos para simular actividad.
-- No atribuir la autoría humana de un cambio producido por IA; documentar su origen.
-- Una mejora por iteración; preferir ramas y PR revisables.
-- Si GitHub no permite escribir o CI falla, reportarlo y detener la integración.
+## Orquestación de bajo costo
+Un orquestador elige **una mejora principal por ejecución** (aproximadamente día por medio), en función del roadmap y bloqueos. Roles lógicos **bajo demanda**, no seis procesos simultáneos:
+- **Product analyst:** requisitos y criterios de aceptación.
+- **Architect:** fronteras modulares, decisiones ADR, compatibilidad.
+- **Backend engineer:** código y persistencia.
+- **Security reviewer:** permisos, datos personales y aislamiento.
+- **QA reviewer:** pruebas unitarias, HTTP, integración y regresiones.
+- **DevOps reviewer:** CI/CD, migraciones, backups y recuperación.
 
-## Flujo de desarrollo
+Activar solo los roles pertinentes a la tarea; preferir GitHub Actions y herramientas ya existentes. No instalar frameworks de agentes, skills externos o servicios de pago sin necesidad documentada. Estos roles son instrucciones para la automatización, no un sistema multiagente ejecutándose permanentemente.
 
-1. Revisar `docs/ROADMAP.md`, `docs/DECISIONS.md`, el historial y las pruebas.
-2. Seleccionar la mejora con criterios de aceptación claros.
-3. Modificar únicamente los archivos necesarios; agregar pruebas.
-4. Ejecutar `npm run check` y `npm test` cuando el entorno esté disponible.
-5. Actualizar `docs/DEVELOPMENT-JOURNAL.md` y `CHANGELOG.md`.
-6. Preparar commit descriptivo y PR; integrar solo con comprobaciones satisfactorias.
-7. Si no existe trabajo seguro, no hacer un commit.
+## Flujo obligatorio
+1. Leer README, roadmap, este archivo y **solo** los archivos relevantes.
+2. Si existe PR pendiente, verificar su CI y resolverlo antes de abrir otra mejora.
+3. Definir necesidad, alcance y criterio de aceptación. Para reglas críticas, TDD selectivo.
+4. Rama independiente, cambio mínimo, sin reescrituras masivas.
+5. Cinco verificaciones: requisitos, lógica/casos límite, seguridad, pruebas, mantenibilidad.
+6. Actualizar documentación afectada y bitácora brevemente; consolidar documentación amplia por hitos.
+7. PR con origen IA declarado. Integrar solo con CI **del commit** verde, permisos y ausencia de bloqueos.
+8. Reportar PR/commit, cambio, CI y siguiente paso. Si no hay mejora segura, **no forzar commit**.
 
-## Calidad
+## Gates
+- **Seguridad:** prohibido exponer datos de estudiantes o habilitar multiinstitución sin autenticación, autorización y pruebas de aislamiento.
+- **Persistencia:** cambios de esquema con migración, reversión o estrategia de recuperación y pruebas.
+- **Arquitectura:** nuevas dependencias/stack requieren ADR y compatibilidad; evitar complejidad no justificada.
+- **Operación:** despliegue real requiere backups, restauración, secretos y aprobación.
+- **Transparencia:** nunca atribuir autoría humana ficticia ni inventar resultados de tests, mercado o avances.
 
-Módulos pequeños, errores HTTP estables, entradas validadas, pruebas deterministas y documentación en español comprensible.
+No se mezclan repositorios. No se hacen commits vacíos/cosméticos. No se introduce un agente autónomo con permisos irrestrictos.

@@ -3,6 +3,10 @@
 Formato simplificado, cambios reales y verificables.
 
 ## [Unreleased]
+### Documentación y planificación (2026-11-24)
+
+- Dirección aprobada hacia gestión bibliotecaria escolar: README, visión de producto, ADR, roadmap y gobernanza de roles IA. **Solo documentación; las funcionalidades SaaS no están implementadas.** Trabajo asistido por IA.
+
 
 ### Corregido
 
