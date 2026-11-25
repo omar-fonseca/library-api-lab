@@ -1,20 +1,50 @@
-# Hoja de ruta ligera
+# Roadmap — Library API Lab → Gestión Bibliotecaria Escolar
 
-No existe obligación de publicar cambios en cada ejecución: priorizar calidad y valor comprobable.
+**Estado:** dirección de producto aprobada; implementación de la evolución pendiente. No confundir fases planeadas con funcionalidades entregadas. Priorizar calidad sobre volumen de commits.
 
-## Backlog
+## Fase 0 — Gobierno y documentación (en curso)
+- [x] API v0.1.0, pruebas y CI existentes preservados.
+- [x] PR #14 de filtros combinados integrado con CI satisfactorio.
+- [ ] Publicar y verificar README, visión, ADR y reglas de agentes actualizadas.
+- [ ] Definir requisitos verificables y mapa de amenazas inicial.
 
-1. **Cobertura adicional de validación**: probar entradas vacías, búsquedas Unicode y límites de paginación. Criterio: pruebas reproducibles.
-2. ~~**Ordenación configurable**: `sort=title|year`, `order=asc|desc`; documentación y pruebas de orden estable.~~ Completado.
-3. ~~**ETag o cache condicional**: investigar si aporta valor a una API de solo lectura antes de implementarlo.~~ Completado: ETag fuerte y revalidación 304 para catálogo y detalle.
-4. ~~**Observabilidad mínima**: registrar método, ruta y duración sin información sensible; pruebas de logs.~~ Completado: evento JSON al finalizar cada respuesta, plantilla de ruta, estado y duración, sin URL ni parámetros.
-5. **Revisión TypeScript**: contrastar costo/beneficio de migración y asegurar tipado si se aprueba.
-6. **División de módulos si crece**: refactorizar solamente cuando la complejidad lo justifique.
+## Fase 1 — Arquitectura y contratos
+- [ ] ADR para TypeScript/framework HTTP (mantener Node nativo si el beneficio no compensa).
+- [ ] Diseñar módulos y contratos, sin mover todo el código en un único PR.
+- [ ] CI para tipado/lint solo cuando se adopten las herramientas.
 
-## Definición de terminado
+## Fase 2 — Persistencia e inventario
+- [ ] ADR y migraciones PostgreSQL; configuración reproducible.
+- [ ] Instituciones, títulos y ejemplares con restricciones e índices.
+- [ ] CRUD mínimo, validaciones y pruebas de persistencia.
 
-- Necesidad y alcance definidos.
-- Cambios mínimos y prueba de regresión.
-- `npm run check` y `npm test` satisfactorios, con evidencia.
-- Documentación y bitácora actualizadas.
-- PR revisable, sin efectos en otros repositorios.
+## Fase 3 — Lectores y circulación
+- [ ] Lectores con datos mínimos.
+- [ ] Préstamos y devoluciones transaccionales, sin préstamos activos duplicados.
+- [ ] Vencimientos e historial; pruebas de concurrencia e idempotencia.
+
+## Fase 4 — Identidad, aislamiento y web
+- [ ] Autenticación, roles y autorización por institución.
+- [ ] Pruebas negativas de acceso cruzado y revisión de privacidad.
+- [ ] UI accesible para catálogo, lectores, préstamo y devolución.
+
+## Fase 5 — Piloto y operación
+- [ ] Backups y restauración probados, auditoría mínima, procedimientos de despliegue.
+- [ ] Pruebas end-to-end y validación con datos sintéticos.
+- [ ] Investigar colegios reales y disposición de pago **antes** de comprometer gastos o usar datos personales.
+
+## Primera secuencia de PRs
+1. Cerrar PR previo si CI está verde.
+2. Documentación de dirección y gobernanza (esta iteración).
+3. Reglas de negocio y criterios de aceptación.
+4. Modelo de datos y amenazas multiinstitución.
+5. ADR de stack y primera migración pequeña.
+
+## Definición de terminado por PR
+Necesidad explícita; cambio acotado; pruebas relevantes; `npm run check` y `npm test` o pipeline equivalente satisfactorios; bitácora/contratos actualizados proporcionalmente; CI del commit en verde; sin cambios a otros repositorios ni servicios pagos. Un PR documental puede validarse con el pipeline existente, sin inventar pruebas funcionales.
+
+## Documentación por hitos
+Documentar contratos, decisiones y riesgos **en cada cambio**; consolidar README, diagramas y guía operativa en hitos importantes (~40% de alcance comprobado y antes del piloto), sin esperar al 40% para documentar seguridad o API.
+
+## Backlog histórico
+Ordenación, ETag, observabilidad, búsqueda Unicode, validación y pruebas de paginación ya forman parte de la API actual. Ver `CHANGELOG.md` y `docs/DEVELOPMENT-JOURNAL.md`.

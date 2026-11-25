@@ -121,3 +121,11 @@ Esta bitácora explica los cambios en lenguaje humano para facilitar el estudio 
 **Cambio:** prueba HTTP que exige orden previo al corte, total filtrado consistente y página posterior vacía. Sin cambios de API ni dependencias.
 
 **Origen:** prueba preparada por automatización asistida por IA; integración condicionada al CI del commit.
+
+## 2026-11-24 — Dirección de producto escolar y gobernanza
+
+**Necesidad:** evolucionar el laboratorio de catálogo ficticio hacia una herramienta web útil para colegios pequeños, sin confundir capacidades existentes con promesas comerciales.
+
+**Cambio:** README renovado, visión y validación comercial documentadas, ADR de evolución incremental, roadmap por fases y AGENTS.md con roles de revisión bajo demanda y gates de seguridad/CI. No cambia el código ni las dependencias. PR #14 previo integrado tras CI satisfactorio.
+
+**Origen:** documentación y decisiones elaboradas con asistencia automatizada de IA y aprobación del propietario. **Validación de esta iteración:** pendiente de GitHub Actions del nuevo PR; no afirmar éxito antes de verificarlo.
