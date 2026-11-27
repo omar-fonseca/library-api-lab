@@ -129,3 +129,7 @@ Esta bitácora explica los cambios en lenguaje humano para facilitar el estudio 
 **Cambio:** README renovado, visión y validación comercial documentadas, ADR de evolución incremental, roadmap por fases y AGENTS.md con roles de revisión bajo demanda y gates de seguridad/CI. No cambia el código ni las dependencias. PR #14 previo integrado tras CI satisfactorio.
 
 **Origen:** documentación y decisiones elaboradas con asistencia automatizada de IA y aprobación del propietario. **Validación de esta iteración:** pendiente de GitHub Actions del nuevo PR; no afirmar éxito antes de verificarlo.
+
+## 2026-11-27 — Requisitos de inventario y circulación
+
+**Necesidad:** evitar construir préstamos y multiinstitución con reglas ambiguas. **Cambio:** criterios de aceptación, invariantes, pruebas de concurrencia, reintentos y aislamiento, sin cambios de código o dependencias. **Origen:** documentación elaborada mediante automatización asistida por IA. **Validación:** condicionada al CI del PR.
