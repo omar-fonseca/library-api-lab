@@ -6,7 +6,8 @@
 - [x] API v0.1.0, pruebas y CI existentes preservados.
 - [x] PR #14 de filtros combinados integrado con CI satisfactorio.
 - [ ] Publicar y verificar README, visión, ADR y reglas de agentes actualizadas.
-- [ ] Definir requisitos verificables y mapa de amenazas inicial.
+- [x] Definir requisitos verificables de inventario y circulación ([criterios](requirements/REQUIREMENTS.md)).
+- [ ] Definir mapa de amenazas inicial y requisitos de identidad.
 
 ## Fase 1 — Arquitectura y contratos
 - [ ] ADR para TypeScript/framework HTTP (mantener Node nativo si el beneficio no compensa).
